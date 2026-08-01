@@ -100,6 +100,17 @@
     flex-wrap: wrap;
     box-shadow: 0 6px 18px rgba(27,37,66,0.12);
   }
+  #bv-shop-root .bv-nav-pill.bv-scroll-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    max-width: 100%;
+    scrollbar-width: none;
+  }
+  #bv-shop-root .bv-nav-pill.bv-scroll-row::-webkit-scrollbar { display: none; }
+  #bv-shop-root .bv-nav-pill.bv-scroll-row .bv-nav-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
   #bv-shop-root .bv-nav-btn {
     border: none;
     background: transparent;
@@ -410,7 +421,7 @@
         <span class="bv-count" id="bv-shop-count"></span>
       </div>
       <div class="bv-nav" style="margin:0 0 18px;padding:0;justify-content:flex-start;">
-        <div class="bv-nav-pill" id="bv-filter-pill">
+        <div class="bv-nav-pill bv-scroll-row" id="bv-filter-pill">
           <button class="bv-nav-btn active" data-filter="All">All</button>
         </div>
       </div>
