@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blessing's Vestule &middot; Kids Shop &amp; Gifts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; }
+  #bv-shop-root {
+    --ink: #2E2C28;
+    --cream: #FAF7F2;
+    --indigo: #55624F;
+    --indigo-deep: #3E4839;
+    --marigold: #BE9A4C;
+    --blush: #E7E1D3;
+    --line: rgba(46,44,40,0.12);
+    font-family: 'Work Sans', -apple-system, sans-serif;
+    color: var(--ink);
+    background: var(--cream);
+    min-height: 100vh;
+    padding: 0 0 60px 0;
+  }
+
+  #bv-shop-root * { box-sizing: border-box; }
+
+  #bv-shop-root .bv-font-display {
+    font-family: 'Fraunces', Georgia, serif;
+  }
+
+  /* ---- Header ---- */
+  #bv-shop-root .bv-header {
+    background: var(--indigo);
+    color: var(--cream);
+    padding: 36px 24px 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  #bv-shop-root .bv-header-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  #bv-shop-root .bv-eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--marigold);
+    font-weight: 600;
+    margin: 0 0 10px 0;
+  }
+  #bv-shop-root .bv-title {
+    font-size: clamp(28px, 5vw, 42px);
+    margin: 0 0 8px 0;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+  #bv-shop-root .bv-subtitle {
+    font-size: 15px;
+    max-width: 480px;
+    opacity: 0.85;
+    margin: 0;
+    line-height: 1.5;
+  }
+  #bv-shop-root .bv-header-dots {
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 45%;
+    background-image: radial-gradient(var(--marigold) 2.5px, transparent 2.5px);
+    background-size: 22px 22px;
+    opacity: 0.18;
+    z-index: 1;
+  }
+
+  #bv-shop-root .bv-wrap-divider {
+    display: block;
+    width: 100%;
+    height: 22px;
+    margin-top: -1px;
+  }
+
+  #bv-shop-root .bv-nav {
+    max-width: 920px;
+    margin: -22px auto 0;
+    padding: 0 24px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 3;
+  }
+  #bv-shop-root .bv-nav-pill {
+    background: var(--cream);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px;
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    box-shadow: 0 6px 18px rgba(27,37,66,0.12);
+  }
+  #bv-shop-root .bv-nav-btn {
+    border: none;
+    background: transparent;
+    padding: 9px 20px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    color: var(--ink);
+    opacity: 0.55;
+  }
+  #bv-shop-root .bv-nav-btn.active {
+    background: var(--indigo);
+    color: var(--cream);
+    opacity: 1;
+  }
+
+  #bv-shop-root .bv-main {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 40px 24px 0;
+  }
+
+  #bv-shop-root .bv-section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  #bv-shop-root .bv-section-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+  }
+  #bv-shop-root .bv-count {
+    font-size: 13px;
+    opacity: 0.6;
+  }
+
+  #bv-shop-root .bv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+  }
+  #bv-shop-root .bv-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  #bv-shop-root .bv-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(42,35,32,0.1);
+  }
+  #bv-shop-root .bv-card-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: var(--blush);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  #bv-shop-root .bv-card-img img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  #bv-shop-root .bv-card-img .bv-placeholder {
+    font-size: 34px;
+    opacity: 0.5;
+  }
+  #bv-shop-root .bv-card-body {
+    padding: 14px 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+  #bv-shop-root .bv-card-name {
+    font-weight: 600;
+    font-size: 15px;
+    margin: 0;
+  }
+  #bv-shop-root .bv-card-desc {
+    font-size: 12.5px;
+    opacity: 0.7;
+    margin: 0;
+    line-height: 1.4;
+    flex: 1;
+  }
+  #bv-shop-root .bv-card-price {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--indigo);
+    margin: 4px 0 0;
+  }
+  #bv-shop-root .bv-card-btn {
+    margin-top: 8px;
+    background: var(--marigold);
+    color: var(--indigo-deep);
+    border: none;
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  #bv-shop-root .bv-card-btn:hover { filter: brightness(0.95); }
+
+  #bv-shop-root .bv-card-del {
+    position: absolute;
+    top: 8px; right: 8px;
+    background: rgba(42,35,32,0.55);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    width: 26px; height: 26px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+  }
+  #bv-shop-root .bv-card-img-wrap { position: relative; }
+
+  #bv-shop-root .bv-empty {
+    text-align: center;
+    padding: 50px 20px;
+    opacity: 0.6;
+    font-size: 14px;
+  }
+
+  #bv-shop-root .bv-panel {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  #bv-shop-root .bv-panel-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 14px 0;
+  }
+  #bv-shop-root .bv-field {
+    margin-bottom: 12px;
+  }
+  #bv-shop-root .bv-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    opacity: 0.75;
+  }
+  #bv-shop-root .bv-field input,
+  #bv-shop-root .bv-field textarea,
+  #bv-shop-root .bv-field select {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 9px 11px;
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--cream);
+  }
+  #bv-shop-root .bv-field textarea { resize: vertical; min-height: 60px; }
+  #bv-shop-root .bv-row2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  #bv-shop-root .bv-submit {
+    background: var(--indigo);
+    color: var(--cream);
+    border: none;
+    border-radius: 8px;
+    padding: 11px 18px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  #bv-shop-root .bv-submit:hover { background: var(--indigo-deep); }
+  #bv-shop-root .bv-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+  #bv-shop-root .bv-hint {
+    font-size: 12px;
+    opacity: 0.6;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  #bv-shop-root .bv-order-item {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    background: var(--cream);
+  }
+  #bv-shop-root .bv-order-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  #bv-shop-root .bv-order-name { font-weight: 700; font-size: 14px; }
+  #bv-shop-root .bv-order-date { font-size: 11px; opacity: 0.55; }
+  #bv-shop-root .bv-order-detail { font-size: 13px; opacity: 0.8; margin: 2px 0; }
+  #bv-shop-root .bv-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 999px;
+    margin-top: 6px;
+    cursor: pointer;
+    border: none;
+  }
+  #bv-shop-root .bv-tag.pending { background: var(--blush); color: #8a3b3b; }
+  #bv-shop-root .bv-tag.done { background: #d9ecd9; color: #2d5a2d; }
+
+  #bv-shop-root .bv-modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(27,37,66,0.5);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    z-index: 50;
+  }
+  #bv-shop-root .bv-modal {
+    background: var(--cream);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 420px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+  }
+  #bv-shop-root .bv-modal-close {
+    float: right;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    opacity: 0.6;
+  }
+  #bv-shop-root .bv-modal-product {
+    font-size: 13px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+  }
+
+  #bv-shop-root .bv-toast {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--indigo-deep);
+    color: var(--cream);
+    padding: 12px 20px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 60;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.25);
+  }
+
+  @media (max-width: 480px) {
+    #bv-shop-root .bv-row2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div id="bv-shop-root">
+  <div class="bv-header">
+    <div class="bv-header-dots"></div>
+    <div class="bv-header-inner">
+      <p class="bv-eyebrow">Blessing's Vestule &middot; Kids Shop &amp; Gifts</p>
+      <h1 class="bv-title bv-font-display">Little things, chosen with love</h1>
+      <p class="bv-subtitle">Kids' essentials, party packs &amp; gifts &mdash; browse and place an order below. Payment is on delivery &mdash; we'll reach out to arrange everything. Delivery currently covers Lagos only.</p>
+    </div>
+  </div>
+  <svg class="bv-wrap-divider" viewBox="0 0 1200 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 L1200,0 L1200,10 C1100,20 1000,2 900,10 C800,18 700,2 600,10 C500,18 400,2 300,10 C200,18 100,2 0,10 Z" fill="#FAF7F2"/>
+  </svg>
+
+  <div class="bv-nav">
+    <div class="bv-nav-pill">
+      <button class="bv-nav-btn active" data-view="shop">Shop</button>
+      <button class="bv-nav-btn" data-view="manage">Manage</button>
+    </div>
+  </div>
+
+  <div class="bv-main">
+
+    <div id="bv-view-shop">
+      <div class="bv-section-head">
+        <h2 class="bv-section-title bv-font-display">Available now</h2>
+        <span class="bv-count" id="bv-shop-count"></span>
+      </div>
+      <div class="bv-nav" style="margin:0 0 18px;padding:0;justify-content:flex-start;">
+        <div class="bv-nav-pill" id="bv-filter-pill">
+          <button class="bv-nav-btn active" data-filter="All">All</button>
+        </div>
+      </div>
+      <div style="background:var(--blush);border-radius:10px;padding:10px 14px;font-size:12.5px;margin-bottom:18px;line-height:1.5;">
+        &#128204; <strong>Tip:</strong> Bookmark this page or tap your browser's "Add to Home Screen" option so you can check new items anytime.
+      </div>
+      <div class="bv-grid" id="bv-shop-grid"></div>
+      <div class="bv-empty" id="bv-shop-empty" style="display:none;">No items yet &mdash; check back soon.</div>
+    </div>
+
+    <div id="bv-view-manage" style="display:none;">
+
+      <div class="bv-panel">
+        <p class="bv-panel-title">Add an item</p>
+        <form id="bv-product-form">
+          <div class="bv-row2">
+            <div class="bv-field">
+              <label>Item name</label>
+              <input type="text" id="bv-p-name" required placeholder="e.g. Soft cotton onesie (0-3m)">
+            </div>
+            <div class="bv-field">
+              <label>Price (&#8358;)</label>
+              <input type="text" id="bv-p-price" required placeholder="e.g. 6,500">
+            </div>
+          </div>
+          <div class="bv-field">
+            <label>Category</label>
+            <select id="bv-p-category"></select>
+          </div>
+          <div class="bv-field">
+            <label>Photo</label>
+            <input type="file" id="bv-p-image-file" accept="image/*">
+            <div id="bv-p-image-preview" style="margin-top:8px;"></div>
+          </div>
+          <div class="bv-field">
+            <label>Short description</label>
+            <textarea id="bv-p-desc" placeholder="Size, color, material..."></textarea>
+          </div>
+          <div class="bv-field">
+            <label>Demo video link (optional) &mdash; any site: YouTube, the product's original page, Google Drive, etc.</label>
+            <input type="url" id="bv-p-video" placeholder="Paste the video link">
+          </div>
+          <button type="submit" class="bv-submit" id="bv-add-item-submit">Add to shop</button>
+        </form>
+        <p class="bv-hint">Photos are uploaded straight from your device.</p>
+      </div>
+
+      <div class="bv-panel">
+        <p class="bv-panel-title">Categories</p>
+        <div class="bv-row2">
+          <div class="bv-field" style="margin-bottom:0;">
+            <label>Add a new category</label>
+            <input type="text" id="bv-new-category" placeholder="e.g. Stationery">
+          </div>
+          <div class="bv-field" style="margin-bottom:0;display:flex;align-items:flex-end;">
+            <button type="button" id="bv-add-category-btn" class="bv-submit" style="width:100%;">Add category</button>
+          </div>
+        </div>
+        <div id="bv-category-list" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;"></div>
+        <p class="bv-hint">New categories appear instantly in the shop filter and the item form.</p>
+      </div>
+
+      <div class="bv-panel">
+        <p class="bv-panel-title">Manage PIN</p>
+        <div class="bv-field" style="margin-bottom:0;">
+          <label>Set a simple PIN so only you can open Manage (basic protection, not high security)</label>
+          <input type="text" id="bv-admin-pin" placeholder="e.g. 4821">
+        </div>
+      </div>
+
+      <div class="bv-panel">
+        <p class="bv-panel-title">Your WhatsApp number</p>
+        <div class="bv-field" style="margin-bottom:0;">
+          <label>Used so order buttons can message you directly (include country code, e.g. 2348012345678)</label>
+          <input type="text" id="bv-admin-whatsapp" placeholder="2348012345678">
+        </div>
+      </div>
+
+      <div class="bv-section-head">
+        <h2 class="bv-section-title bv-font-display">Your items</h2>
+        <span class="bv-count" id="bv-manage-count"></span>
+      </div>
+      <div class="bv-grid" id="bv-manage-grid"></div>
+
+      <div class="bv-section-head" style="margin-top:32px;">
+        <h2 class="bv-section-title bv-font-display">Orders</h2>
+        <span class="bv-count" id="bv-orders-count"></span>
+      </div>
+      <div id="bv-orders-list"></div>
+      <div class="bv-empty" id="bv-orders-empty" style="display:none;">No orders placed yet.</div>
+
+    </div>
+
+  </div>
+</div>
+
+<div id="bv-modal-root"></div>
+<div id="bv-toast-root"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function() {
+  // ---- Supabase connection ----
+  const SUPABASE_URL = 'https://nqufzhiadvqdnuoolhwi.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xdWZ6aGlhZHZxZG51b29saHdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1OTQ2MDcsImV4cCI6MjEwMTE3MDYwN30.VN8t4oYFey63LsD6EeMLh5Djw5F6koPIWRDw-LjW1Yc';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const BUCKET = 'product-photos';
+
+  let products = [];
+  let orders = [];
+  let settings = { whatsapp: '', pin: '', categories: ["Kids' Essentials", "Party Packs & Souvenirs", "Gifts"] };
+  let manageUnlocked = false;
+  let currentFilter = 'All';
+  let pendingImageUrl = '';
+
+  function escapeHtml(str) {
+    return (str || '').replace(/[&<>"']/g, function(m) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+    });
+  }
+
+  function showToast(msg) {
+    const root = document.getElementById('bv-toast-root');
+    root.innerHTML = '<div class="bv-toast">' + escapeHtml(msg) + '</div>';
+    setTimeout(function() { root.innerHTML = ''; }, 2600);
+  }
+
+  // ---- Data loading ----
+  async function loadAll() {
+    const [{ data: prodData, error: prodErr }, { data: orderData, error: orderErr }, { data: settingsData, error: settingsErr }] = await Promise.all([
+      sb.from('products').select('*').order('created_at', { ascending: true }),
+      sb.from('orders').select('*').order('created_at', { ascending: false }),
+      sb.from('shop_settings').select('*').eq('id', 1).single()
+    ]);
+
+    if (prodErr) { showToast('Could not load items'); products = []; }
+    else products = (prodData || []).map(mapProductFromDb);
+
+    if (orderErr) { orders = []; }
+    else orders = (orderData || []).map(mapOrderFromDb);
+
+    if (settingsErr || !settingsData) {
+      settings = { whatsapp: '', pin: '', categories: ["Kids' Essentials", "Party Packs & Souvenirs", "Gifts"] };
+    } else {
+      settings = {
+        whatsapp: settingsData.whatsapp || '',
+        pin: settingsData.pin || '',
+        categories: (settingsData.categories && settingsData.categories.length) ? settingsData.categories : ["Kids' Essentials", "Party Packs & Souvenirs", "Gifts"]
+      };
+    }
+    render();
+  }
+
+  function mapProductFromDb(row) {
+    return {
+      id: row.id,
+      name: row.name,
+      price: row.price,
+      category: row.category,
+      image: row.image_url,
+      video: row.video_url,
+      desc: row.description,
+      outOfStock: !!row.out_of_stock
+    };
+  }
+  function mapOrderFromDb(row) {
+    return {
+      id: row.id,
+      time: new Date(row.created_at).getTime(),
+      product: row.product_name,
+      qty: row.qty,
+      name: row.customer_name,
+      phone: row.phone,
+      address: row.address,
+      notes: row.notes,
+      status: row.status
+    };
+  }
+
+  async function saveSettings() {
+    const { error } = await sb.from('shop_settings').update({
+      whatsapp: settings.whatsapp,
+      pin: settings.pin,
+      categories: settings.categories
+    }).eq('id', 1);
+    if (error) showToast('Could not save — try again');
+  }
+
+  function switchView(view) {
+    document.getElementById('bv-view-shop').style.display = view === 'shop' ? '' : 'none';
+    document.getElementById('bv-view-manage').style.display = view === 'manage' ? '' : 'none';
+    document.querySelectorAll('#bv-shop-root .bv-nav-btn').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.view === view);
+    });
+  }
+
+  function productCardHtml(prod, editable) {
+    const img = prod.image
+      ? '<img src="' + escapeHtml(prod.image) + '" alt="' + escapeHtml(prod.name) + '">'
+      : '<span class="bv-placeholder">&#128118;</span>';
+    const oos = !!prod.outOfStock;
+    return (
+      '<div class="bv-card' + (oos && !editable ? '" style="opacity:0.6;' : '') + '">' +
+        '<div class="bv-card-img-wrap">' +
+          (editable ? '<button class="bv-card-del" data-del="' + prod.id + '" title="Remove">&times;</button>' : '') +
+          '<div class="bv-card-img">' + img +
+            (oos ? '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(46,44,40,0.45);"><span style="transform:rotate(-10deg);border:2px solid #fff;color:#fff;font-weight:800;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;padding:5px 12px;border-radius:6px;background:rgba(0,0,0,0.25);">Out of Stock</span></div>' : '') +
+          '</div>' +
+        '</div>' +
+        '<div class="bv-card-body">' +
+          '<p class="bv-card-name">' + escapeHtml(prod.name) + '</p>' +
+          (prod.category ? '<p style="font-size:11px;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:var(--indigo);opacity:0.7;margin:0;">' + escapeHtml(prod.category) + '</p>' : '') +
+          '<p class="bv-card-desc">' + escapeHtml(prod.desc || '') + '</p>' +
+          '<p class="bv-card-price">&#8358;' + escapeHtml(prod.price) + '</p>' +
+          (prod.video ? '<a href="' + escapeHtml(prod.video) + '" target="_blank" rel="noopener" style="font-size:12px;font-weight:700;color:var(--indigo);text-decoration:none;margin-top:4px;">&#9654; Watch demo</a>' : '') +
+          (editable
+            ? '<button class="bv-card-btn" data-toggle-stock="' + prod.id + '" style="background:' + (oos ? 'var(--indigo)' : '#d9d2c0') + ';color:' + (oos ? 'var(--cream)' : 'var(--ink)') + ';">' + (oos ? 'Mark back in stock' : 'Mark out of stock') + '</button>'
+            : (oos ? '<button class="bv-card-btn" disabled style="opacity:0.5;cursor:not-allowed;">Out of stock</button>' : '<button class="bv-card-btn" data-order="' + prod.id + '">Order this</button>')) +
+        '</div>' +
+      '</div>'
+    );
+  }
+
+  function render() {
+    const shopGrid = document.getElementById('bv-shop-grid');
+    const shopProducts = currentFilter === 'All' ? products : products.filter(function(p) { return p.category === currentFilter; });
+    document.getElementById('bv-shop-count').textContent = shopProducts.length ? (shopProducts.length + ' item' + (shopProducts.length === 1 ? '' : 's')) : '';
+    document.getElementById('bv-shop-empty').style.display = shopProducts.length ? 'none' : '';
+    shopGrid.innerHTML = shopProducts.map(function(p) { return productCardHtml(p, false); }).join('');
+
+    const manageGrid = document.getElementById('bv-manage-grid');
+    document.getElementById('bv-manage-count').textContent = products.length ? (products.length + ' item' + (products.length === 1 ? '' : 's')) : '';
+    manageGrid.innerHTML = products.map(function(p) { return productCardHtml(p, true); }).join('');
+
+    document.getElementById('bv-admin-whatsapp').value = settings.whatsapp || '';
+    document.getElementById('bv-admin-pin').value = settings.pin || '';
+
+    const catSelect = document.getElementById('bv-p-category');
+    const prevSelected = catSelect.value;
+    catSelect.innerHTML = settings.categories.map(function(c) {
+      return '<option value="' + escapeHtml(c) + '">' + escapeHtml(c) + '</option>';
+    }).join('');
+    if (settings.categories.includes(prevSelected)) catSelect.value = prevSelected;
+
+    const filterPill = document.getElementById('bv-filter-pill');
+    filterPill.innerHTML = '<button class="bv-nav-btn' + (currentFilter === 'All' ? ' active' : '') + '" data-filter="All">All</button>' +
+      settings.categories.map(function(c) {
+        return '<button class="bv-nav-btn' + (currentFilter === c ? ' active' : '') + '" data-filter="' + escapeHtml(c) + '">' + escapeHtml(c) + '</button>';
+      }).join('');
+    if (!settings.categories.includes(currentFilter) && currentFilter !== 'All') currentFilter = 'All';
+
+    const catList = document.getElementById('bv-category-list');
+    catList.innerHTML = settings.categories.map(function(c) {
+      return '<span style="display:inline-flex;align-items:center;gap:6px;background:var(--blush);border-radius:999px;padding:5px 6px 5px 12px;font-size:12.5px;font-weight:600;">' +
+        escapeHtml(c) +
+        '<button data-remove-category="' + escapeHtml(c) + '" style="border:none;background:rgba(0,0,0,0.12);border-radius:50%;width:18px;height:18px;cursor:pointer;font-size:11px;line-height:1;">&times;</button>' +
+      '</span>';
+    }).join('');
+
+    const ordersList = document.getElementById('bv-orders-list');
+    document.getElementById('bv-orders-count').textContent = orders.length ? (orders.length + ' order' + (orders.length === 1 ? '' : 's')) : '';
+    document.getElementById('bv-orders-empty').style.display = orders.length ? 'none' : '';
+    const sorted = orders.slice().sort(function(a, b) { return b.time - a.time; });
+    ordersList.innerHTML = sorted.map(function(o) {
+      const dateStr = new Date(o.time).toLocaleString();
+      return (
+        '<div class="bv-order-item">' +
+          '<div class="bv-order-top">' +
+            '<span class="bv-order-name">' + escapeHtml(o.name) + '</span>' +
+            '<span class="bv-order-date">' + dateStr + '</span>' +
+          '</div>' +
+          '<p class="bv-order-detail"><strong>Item:</strong> ' + escapeHtml(o.product) + '</p>' +
+          '<p class="bv-order-detail"><strong>Qty:</strong> ' + escapeHtml(String(o.qty)) + '</p>' +
+          '<p class="bv-order-detail"><strong>Phone:</strong> ' + escapeHtml(o.phone) + '</p>' +
+          '<p class="bv-order-detail"><strong>Delivery address:</strong> ' + escapeHtml(o.address) + '</p>' +
+          (o.notes ? '<p class="bv-order-detail"><strong>Notes:</strong> ' + escapeHtml(o.notes) + '</p>' : '') +
+          '<button class="bv-tag ' + (o.status === 'done' ? 'done' : 'pending') + '" data-toggle-order="' + o.id + '">' +
+            (o.status === 'done' ? 'Fulfilled' : 'Mark as fulfilled') +
+          '</button>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function openOrderModal(prod) {
+    const root = document.getElementById('bv-modal-root');
+    root.innerHTML =
+      '<div class="bv-modal-backdrop" id="bv-modal-backdrop">' +
+        '<div class="bv-modal">' +
+          '<button class="bv-modal-close" id="bv-modal-close">&times;</button>' +
+          '<p class="bv-panel-title bv-font-display">Place your order</p>' +
+          '<div class="bv-modal-product"><strong>' + escapeHtml(prod.name) + '</strong> &mdash; &#8358;' + escapeHtml(prod.price) + '</div>' +
+          '<form id="bv-order-form">' +
+            '<div class="bv-field"><label>Your name</label><input type="text" id="bv-o-name" required></div>' +
+            '<div class="bv-row2">' +
+              '<div class="bv-field"><label>Phone / WhatsApp</label><input type="tel" id="bv-o-phone" required></div>' +
+              '<div class="bv-field"><label>Quantity</label><input type="number" id="bv-o-qty" value="1" min="1" required></div>' +
+            '</div>' +
+            '<div class="bv-field"><label>Delivery address (Lagos only for now)</label><textarea id="bv-o-address" required placeholder="Include your area/neighborhood in Lagos"></textarea></div>' +
+            '<div class="bv-field"><label>Notes (optional)</label><textarea id="bv-o-notes"></textarea></div>' +
+            '<p class="bv-hint" style="margin-top:0;margin-bottom:10px;">&#128205; We currently deliver within Lagos only.</p>' +
+            '<button type="submit" class="bv-submit">Submit order &mdash; pay on delivery</button>' +
+            '<p class="bv-hint">No payment is taken here. We\'ll contact you to confirm and arrange delivery.</p>' +
+          '</form>' +
+        '</div>' +
+      '</div>';
+
+    document.getElementById('bv-modal-close').onclick = closeModal;
+    document.getElementById('bv-modal-backdrop').onclick = function(e) {
+      if (e.target.id === 'bv-modal-backdrop') closeModal();
+    };
+    document.getElementById('bv-order-form').onsubmit = function(e) {
+      e.preventDefault();
+      submitOrder(prod);
+    };
+  }
+
+  function closeModal() {
+    document.getElementById('bv-modal-root').innerHTML = '';
+  }
+
+  async function submitOrder(prod) {
+    const qty = document.getElementById('bv-o-qty').value;
+    const name = document.getElementById('bv-o-name').value;
+    const phone = document.getElementById('bv-o-phone').value;
+    const address = document.getElementById('bv-o-address').value;
+    const notes = document.getElementById('bv-o-notes').value;
+
+    const { data, error } = await sb.from('orders').insert({
+      product_name: prod.name,
+      qty: qty,
+      customer_name: name,
+      phone: phone,
+      address: address,
+      notes: notes,
+      status: 'pending'
+    }).select().single();
+
+    if (error) {
+      showToast('Could not place order — try again');
+      return;
+    }
+
+    orders.unshift(mapOrderFromDb(data));
+    closeModal();
+    render();
+    showToast('Order placed! We\'ll be in touch to confirm.');
+
+    if (settings.whatsapp) {
+      const msg = 'New order from Blessing\'s Vestule Kids Shop & Gifts:\n' +
+        'Item: ' + prod.name + ' (x' + qty + ')\n' +
+        'Name: ' + name + '\n' +
+        'Phone: ' + phone + '\n' +
+        'Address: ' + address +
+        (notes ? '\nNotes: ' + notes : '');
+      const url = 'https://wa.me/' + settings.whatsapp.replace(/[^0-9]/g, '') + '?text=' + encodeURIComponent(msg);
+      window.open(url, '_blank');
+    }
+  }
+
+  // ---- event delegation ----
+  document.getElementById('bv-shop-root').addEventListener('click', function(e) {
+    const navBtn = e.target.closest('.bv-nav-btn');
+    if (navBtn && navBtn.dataset.view) {
+      if (navBtn.dataset.view === 'manage' && settings.pin && !manageUnlocked) {
+        const entered = window.prompt('Enter Manage PIN:');
+        if (entered !== settings.pin) {
+          if (entered !== null) showToast('Incorrect PIN');
+          return;
+        }
+        manageUnlocked = true;
+      }
+      switchView(navBtn.dataset.view);
+      return;
+    }
+
+    const filterBtn = e.target.closest('[data-filter]');
+    if (filterBtn) {
+      currentFilter = filterBtn.dataset.filter;
+      render();
+      return;
+    }
+
+    const orderBtn = e.target.closest('[data-order]');
+    if (orderBtn) {
+      const prod = products.find(function(p) { return p.id === orderBtn.dataset.order; });
+      if (prod) openOrderModal(prod);
+      return;
+    }
+
+    const delBtn = e.target.closest('[data-del]');
+    if (delBtn) {
+      const id = delBtn.dataset.del;
+      sb.from('products').delete().eq('id', id).then(function(res) {
+        if (res.error) { showToast('Could not remove item'); return; }
+        products = products.filter(function(p) { return p.id !== id; });
+        render();
+      });
+      return;
+    }
+
+    const stockBtn = e.target.closest('[data-toggle-stock]');
+    if (stockBtn) {
+      const id = stockBtn.dataset.toggleStock;
+      const prod = products.find(function(p) { return p.id === id; });
+      if (!prod) return;
+      const newVal = !prod.outOfStock;
+      sb.from('products').update({ out_of_stock: newVal }).eq('id', id).then(function(res) {
+        if (res.error) { showToast('Could not update item'); return; }
+        prod.outOfStock = newVal;
+        render();
+      });
+      return;
+    }
+
+    const toggleBtn = e.target.closest('[data-toggle-order]');
+    if (toggleBtn) {
+      const id = toggleBtn.dataset.toggleOrder;
+      const ord = orders.find(function(o) { return o.id === id; });
+      if (!ord) return;
+      const newStatus = ord.status === 'done' ? 'pending' : 'done';
+      sb.from('orders').update({ status: newStatus }).eq('id', id).then(function(res) {
+        if (res.error) { showToast('Could not update order'); return; }
+        ord.status = newStatus;
+        render();
+      });
+      return;
+    }
+
+    const removeCatBtn = e.target.closest('[data-remove-category]');
+    if (removeCatBtn) {
+      const cat = removeCatBtn.dataset.removeCategory;
+      settings.categories = settings.categories.filter(function(c) { return c !== cat; });
+      saveSettings();
+      render();
+      showToast('Category removed');
+      return;
+    }
+  });
+
+  function resizeImage(file) {
+    return new Promise(function(resolve, reject) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        const img = new Image();
+        img.onload = function() {
+          const maxDim = 900;
+          let w = img.width, h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+            else { w = Math.round(w * maxDim / h); h = maxDim; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          canvas.toBlob(function(blob) { resolve(blob); }, 'image/jpeg', 0.82);
+        };
+        img.onerror = reject;
+        img.src = reader.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  document.getElementById('bv-p-image-file').addEventListener('change', async function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('bv-p-image-preview');
+    const submitBtn = document.getElementById('bv-add-item-submit');
+    if (!file) { pendingImageUrl = ''; preview.innerHTML = ''; return; }
+    preview.innerHTML = '<span style="font-size:12px;opacity:0.6;">Uploading photo&hellip;</span>';
+    submitBtn.disabled = true;
+    try {
+      const blob = await resizeImage(file);
+      const path = 'products/' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '.jpg';
+      const { error: uploadErr } = await sb.storage.from(BUCKET).upload(path, blob, { contentType: 'image/jpeg' });
+      if (uploadErr) throw uploadErr;
+      const { data: urlData } = sb.storage.from(BUCKET).getPublicUrl(path);
+      pendingImageUrl = urlData.publicUrl;
+      preview.innerHTML = '<img src="' + pendingImageUrl + '" style="width:70px;height:70px;object-fit:cover;border-radius:8px;">';
+    } catch (err) {
+      showToast('Could not upload that photo — try another');
+      pendingImageUrl = '';
+      preview.innerHTML = '';
+    }
+    submitBtn.disabled = false;
+  });
+
+  document.getElementById('bv-product-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const submitBtn = document.getElementById('bv-add-item-submit');
+    submitBtn.disabled = true;
+
+    const row = {
+      name: document.getElementById('bv-p-name').value,
+      price: document.getElementById('bv-p-price').value,
+      category: document.getElementById('bv-p-category').value,
+      image_url: pendingImageUrl || null,
+      description: document.getElementById('bv-p-desc').value,
+      video_url: document.getElementById('bv-p-video').value.trim() || null,
+      out_of_stock: false
+    };
+
+    const { data, error } = await sb.from('products').insert(row).select().single();
+    submitBtn.disabled = false;
+
+    if (error) {
+      showToast('Could not add item — try again');
+      return;
+    }
+
+    products.push(mapProductFromDb(data));
+    e.target.reset();
+    pendingImageUrl = '';
+    document.getElementById('bv-p-image-preview').innerHTML = '';
+    render();
+    showToast('Item added to shop');
+  });
+
+  document.getElementById('bv-p-price').addEventListener('input', function(e) {
+    const digitsOnly = e.target.value.replace(/[^0-9]/g, '');
+    e.target.value = digitsOnly ? Number(digitsOnly).toLocaleString('en-US') : '';
+  });
+
+  document.getElementById('bv-admin-whatsapp').addEventListener('change', function(e) {
+    settings.whatsapp = e.target.value.trim();
+    saveSettings();
+  });
+
+  function addCategory() {
+    const input = document.getElementById('bv-new-category');
+    const name = input.value.trim();
+    if (!name) {
+      showToast('Type a category name first');
+      return;
+    }
+    if (settings.categories.some(function(c) { return c.toLowerCase() === name.toLowerCase(); })) {
+      showToast('That category already exists');
+      return;
+    }
+    settings.categories.push(name);
+    saveSettings();
+    input.value = '';
+    render();
+    showToast('Category added');
+  }
+
+  document.getElementById('bv-add-category-btn').addEventListener('click', addCategory);
+  document.getElementById('bv-new-category').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); addCategory(); }
+  });
+
+  document.getElementById('bv-admin-pin').addEventListener('change', function(e) {
+    settings.pin = e.target.value.trim();
+    saveSettings();
+    showToast(settings.pin ? 'PIN set' : 'PIN removed');
+  });
+
+  loadAll();
+})();
+</script>
+</body>
+</html>
