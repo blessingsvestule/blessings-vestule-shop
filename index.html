@@ -523,6 +523,7 @@
 <div id="bv-toast-root"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 (function() {
   // ---- Supabase connection ----
@@ -530,6 +531,12 @@
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xdWZ6aGlhZHZxZG51b29saHdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1OTQ2MDcsImV4cCI6MjEwMTE3MDYwN30.VN8t4oYFey63LsD6EeMLh5Djw5F6koPIWRDw-LjW1Yc';
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const BUCKET = 'product-photos';
+
+  // ---- EmailJS (order notification email) ----
+  const EMAILJS_PUBLIC_KEY = 'DuqZq9L1G1pjTROUI';
+  const EMAILJS_SERVICE_ID = 'service_cu6mcqu';
+  const EMAILJS_TEMPLATE_ID = 'template_03pbi5h';
+  if (window.emailjs) window.emailjs.init(EMAILJS_PUBLIC_KEY);
 
   let products = [];
   let orders = [];
@@ -705,7 +712,8 @@
           (o.notes ? '<p class="bv-order-detail"><strong>Notes:</strong> ' + escapeHtml(o.notes) + '</p>' : '') +
           '<button class="bv-tag ' + (o.status === 'done' ? 'done' : 'pending') + '" data-toggle-order="' + o.id + '">' +
             (o.status === 'done' ? 'Fulfilled' : 'Mark as fulfilled') +
-          '</button>' +
+          '</button> ' +
+          '<a href="https://wa.me/' + escapeHtml(o.phone.replace(/[^0-9]/g, '')) + '" target="_blank" rel="noopener" class="bv-tag" style="background:var(--blush);color:var(--indigo-deep);text-decoration:none;">Message customer</a>' +
         '</div>'
       );
     }).join('');
@@ -740,8 +748,7 @@
     };
     document.getElementById('bv-order-form').onsubmit = function(e) {
       e.preventDefault();
-      const whatsappTab = settings.whatsapp ? window.open('', '_blank') : null;
-      submitOrder(prod, whatsappTab);
+      submitOrder(prod);
     };
   }
 
@@ -749,7 +756,7 @@
     document.getElementById('bv-modal-root').innerHTML = '';
   }
 
-  async function submitOrder(prod, whatsappTab) {
+  async function submitOrder(prod) {
     const qty = document.getElementById('bv-o-qty').value;
     const name = document.getElementById('bv-o-name').value;
     const phone = document.getElementById('bv-o-phone').value;
@@ -767,7 +774,6 @@
     }).select().single();
 
     if (error) {
-      if (whatsappTab) whatsappTab.close();
       showToast('Could not place order — try again');
       return;
     }
@@ -775,18 +781,17 @@
     orders.unshift(mapOrderFromDb(data));
     closeModal();
     render();
-    showToast('Order placed! We\'ll be in touch to confirm.');
+    showToast('Order placed!');
 
-    if (settings.whatsapp && whatsappTab) {
-      const msg = 'New order from Blessing\'s Vestule Kids Shop & Gifts:\n' +
-        'Item: ' + prod.name + ' (x' + qty + ')\n' +
-        'Name: ' + name + '\n' +
-        'Phone: ' + phone + '\n' +
-        'Address: ' + address +
-        (notes ? '\nNotes: ' + notes : '');
-      const digits = settings.whatsapp.replace(/[^0-9]/g, '');
-      const url = 'https://wa.me/' + digits + '?text=' + encodeURIComponent(msg);
-      whatsappTab.location.href = url;
+    if (window.emailjs) {
+      window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        item: prod.name,
+        qty: qty,
+        customer_name: name,
+        phone: phone,
+        address: address,
+        notes: notes || 'None'
+      }).catch(function() { /* fails silently — order is already safely saved in Orders list */ });
     }
   }
 
