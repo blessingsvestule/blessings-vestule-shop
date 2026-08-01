@@ -650,6 +650,9 @@
     const shopProducts = currentFilter === 'All' ? products : products.filter(function(p) { return p.category === currentFilter; });
     document.getElementById('bv-shop-count').textContent = shopProducts.length ? (shopProducts.length + ' item' + (shopProducts.length === 1 ? '' : 's')) : '';
     document.getElementById('bv-shop-empty').style.display = shopProducts.length ? 'none' : '';
+    document.getElementById('bv-shop-empty').textContent = shopProducts.length
+      ? ''
+      : (currentFilter === 'All' ? 'No items yet — check back soon.' : (currentFilter + ' — coming soon.'));
     shopGrid.innerHTML = shopProducts.map(function(p) { return productCardHtml(p, false); }).join('');
 
     const manageGrid = document.getElementById('bv-manage-grid');
