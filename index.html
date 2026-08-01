@@ -496,7 +496,7 @@
       <div class="bv-panel">
         <p class="bv-panel-title">Your WhatsApp number</p>
         <div class="bv-field" style="margin-bottom:0;">
-          <label>Used so order buttons can message you directly (include country code, e.g. 2348012345678)</label>
+          <label>Used so order buttons can message you directly. Format: country code + number, no leading 0, no spaces, no +. Example: a number like 0801 234 5678 becomes 2348012345678</label>
           <input type="text" id="bv-admin-whatsapp" placeholder="2348012345678">
         </div>
       </div>
@@ -728,7 +728,7 @@
             '<div class="bv-field"><label>Delivery address (Lagos only for now)</label><textarea id="bv-o-address" required placeholder="Include your area/neighborhood in Lagos"></textarea></div>' +
             '<div class="bv-field"><label>Notes (optional)</label><textarea id="bv-o-notes"></textarea></div>' +
             '<p class="bv-hint" style="margin-top:0;margin-bottom:10px;">&#128205; We currently deliver within Lagos only.</p>' +
-            '<button type="submit" class="bv-submit">Submit order &mdash; pay on delivery</button>' +
+            '<button type="submit" class="bv-submit" style="background:var(--marigold);color:var(--indigo-deep);width:100%;font-size:15px;padding:14px 18px;">&#128230; Submit order &mdash; pay on delivery</button>' +
             '<p class="bv-hint">No payment is taken here. We\'ll contact you to confirm and arrange delivery.</p>' +
           '</form>' +
         '</div>' +
@@ -740,7 +740,8 @@
     };
     document.getElementById('bv-order-form').onsubmit = function(e) {
       e.preventDefault();
-      submitOrder(prod);
+      const whatsappTab = settings.whatsapp ? window.open('', '_blank') : null;
+      submitOrder(prod, whatsappTab);
     };
   }
 
@@ -748,7 +749,7 @@
     document.getElementById('bv-modal-root').innerHTML = '';
   }
 
-  async function submitOrder(prod) {
+  async function submitOrder(prod, whatsappTab) {
     const qty = document.getElementById('bv-o-qty').value;
     const name = document.getElementById('bv-o-name').value;
     const phone = document.getElementById('bv-o-phone').value;
@@ -766,6 +767,7 @@
     }).select().single();
 
     if (error) {
+      if (whatsappTab) whatsappTab.close();
       showToast('Could not place order — try again');
       return;
     }
@@ -775,15 +777,16 @@
     render();
     showToast('Order placed! We\'ll be in touch to confirm.');
 
-    if (settings.whatsapp) {
+    if (settings.whatsapp && whatsappTab) {
       const msg = 'New order from Blessing\'s Vestule Kids Shop & Gifts:\n' +
         'Item: ' + prod.name + ' (x' + qty + ')\n' +
         'Name: ' + name + '\n' +
         'Phone: ' + phone + '\n' +
         'Address: ' + address +
         (notes ? '\nNotes: ' + notes : '');
-      const url = 'https://wa.me/' + settings.whatsapp.replace(/[^0-9]/g, '') + '?text=' + encodeURIComponent(msg);
-      window.open(url, '_blank');
+      const digits = settings.whatsapp.replace(/[^0-9]/g, '');
+      const url = 'https://wa.me/' + digits + '?text=' + encodeURIComponent(msg);
+      whatsappTab.location.href = url;
     }
   }
 
