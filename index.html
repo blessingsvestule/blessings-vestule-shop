@@ -435,7 +435,7 @@
     <div id="bv-view-manage" style="display:none;">
 
       <div class="bv-panel">
-        <p class="bv-panel-title">Add an item</p>
+        <p class="bv-panel-title" id="bv-form-title">Add an item</p>
         <form id="bv-product-form">
           <div class="bv-row2">
             <div class="bv-field">
@@ -465,6 +465,7 @@
             <input type="url" id="bv-p-video" placeholder="Paste the video link">
           </div>
           <button type="submit" class="bv-submit" id="bv-add-item-submit">Add to shop</button>
+          <button type="button" class="bv-submit" id="bv-cancel-edit-btn" style="display:none;background:#d9d2c0;color:var(--ink);margin-left:8px;">Cancel edit</button>
         </form>
         <p class="bv-hint">Photos are uploaded straight from your device.</p>
       </div>
@@ -536,6 +537,7 @@
   let manageUnlocked = false;
   let currentFilter = 'All';
   let pendingImageUrl = '';
+  let editingId = null;
 
   function escapeHtml(str) {
     return (str || '').replace(/[&<>"']/g, function(m) {
@@ -638,7 +640,7 @@
           '<p class="bv-card-price">&#8358;' + escapeHtml(prod.price) + '</p>' +
           (prod.video ? '<a href="' + escapeHtml(prod.video) + '" target="_blank" rel="noopener" style="font-size:12px;font-weight:700;color:var(--indigo);text-decoration:none;margin-top:4px;">&#9654; Watch demo</a>' : '') +
           (editable
-            ? '<button class="bv-card-btn" data-toggle-stock="' + prod.id + '" style="background:' + (oos ? 'var(--indigo)' : '#d9d2c0') + ';color:' + (oos ? 'var(--cream)' : 'var(--ink)') + ';">' + (oos ? 'Mark back in stock' : 'Mark out of stock') + '</button>'
+            ? '<button class="bv-card-btn" data-edit="' + prod.id + '" style="background:#d9d2c0;color:var(--ink);">Edit</button><button class="bv-card-btn" data-toggle-stock="' + prod.id + '" style="background:' + (oos ? 'var(--indigo)' : '#efe9db') + ';color:' + (oos ? 'var(--cream)' : 'var(--ink)') + ';margin-top:6px;">' + (oos ? 'Mark back in stock' : 'Mark out of stock') + '</button>'
             : (oos ? '<button class="bv-card-btn" disabled style="opacity:0.5;cursor:not-allowed;">Out of stock</button>' : '<button class="bv-card-btn" data-order="' + prod.id + '">Order this</button>')) +
         '</div>' +
       '</div>'
@@ -821,8 +823,16 @@
       sb.from('products').delete().eq('id', id).then(function(res) {
         if (res.error) { showToast('Could not remove item'); return; }
         products = products.filter(function(p) { return p.id !== id; });
+        if (editingId === id) cancelEdit();
         render();
       });
+      return;
+    }
+
+    const editBtn = e.target.closest('[data-edit]');
+    if (editBtn) {
+      const prod = products.find(function(p) { return p.id === editBtn.dataset.edit; });
+      if (prod) startEdit(prod);
       return;
     }
 
@@ -913,6 +923,36 @@
     submitBtn.disabled = false;
   });
 
+  function startEdit(prod) {
+    editingId = prod.id;
+    document.getElementById('bv-form-title').textContent = 'Edit item';
+    document.getElementById('bv-add-item-submit').textContent = 'Save changes';
+    document.getElementById('bv-cancel-edit-btn').style.display = 'inline-block';
+    document.getElementById('bv-p-name').value = prod.name || '';
+    document.getElementById('bv-p-price').value = prod.price || '';
+    document.getElementById('bv-p-category').value = prod.category || '';
+    document.getElementById('bv-p-desc').value = prod.desc || '';
+    document.getElementById('bv-p-video').value = prod.video || '';
+    pendingImageUrl = prod.image || '';
+    document.getElementById('bv-p-image-preview').innerHTML = prod.image
+      ? '<img src="' + prod.image + '" style="width:70px;height:70px;object-fit:cover;border-radius:8px;">'
+      : '';
+    document.getElementById('bv-p-image-file').value = '';
+    document.getElementById('bv-view-manage').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function cancelEdit() {
+    editingId = null;
+    document.getElementById('bv-form-title').textContent = 'Add an item';
+    document.getElementById('bv-add-item-submit').textContent = 'Add to shop';
+    document.getElementById('bv-cancel-edit-btn').style.display = 'none';
+    document.getElementById('bv-product-form').reset();
+    pendingImageUrl = '';
+    document.getElementById('bv-p-image-preview').innerHTML = '';
+  }
+
+  document.getElementById('bv-cancel-edit-btn').addEventListener('click', cancelEdit);
+
   document.getElementById('bv-product-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     const submitBtn = document.getElementById('bv-add-item-submit');
@@ -924,10 +964,22 @@
       category: document.getElementById('bv-p-category').value,
       image_url: pendingImageUrl || null,
       description: document.getElementById('bv-p-desc').value,
-      video_url: document.getElementById('bv-p-video').value.trim() || null,
-      out_of_stock: false
+      video_url: document.getElementById('bv-p-video').value.trim() || null
     };
 
+    if (editingId) {
+      const { data, error } = await sb.from('products').update(row).eq('id', editingId).select().single();
+      submitBtn.disabled = false;
+      if (error) { showToast('Could not save changes — try again'); return; }
+      const idx = products.findIndex(function(p) { return p.id === editingId; });
+      if (idx !== -1) products[idx] = mapProductFromDb(data);
+      cancelEdit();
+      render();
+      showToast('Item updated');
+      return;
+    }
+
+    row.out_of_stock = false;
     const { data, error } = await sb.from('products').insert(row).select().single();
     submitBtn.disabled = false;
 
