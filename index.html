@@ -606,7 +606,10 @@
       phone: row.phone,
       address: row.address,
       notes: row.notes,
-      status: row.status
+      status: row.status,
+      isGift: !!row.is_gift,
+      recipientName: row.recipient_name,
+      giftMessage: row.gift_message
     };
   }
 
@@ -643,7 +646,7 @@
         '<div class="bv-card-body">' +
           '<p class="bv-card-name">' + escapeHtml(prod.name) + '</p>' +
           (prod.category ? '<p style="font-size:11px;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:var(--indigo);opacity:0.7;margin:0;">' + escapeHtml(prod.category) + '</p>' : '') +
-          '<p class="bv-card-desc">' + escapeHtml(prod.desc || '') + '</p>' +
+          '<p class="bv-card-desc">' + escapeHtml(prod.desc || '').replace(/\n/g, '<br>') + '</p>' +
           '<p class="bv-card-price">&#8358;' + escapeHtml(prod.price) + '</p>' +
           (prod.video ? '<a href="' + escapeHtml(prod.video) + '" target="_blank" rel="noopener" style="font-size:12px;font-weight:700;color:var(--indigo);text-decoration:none;margin-top:4px;">&#9654; Watch demo</a>' : '') +
           (editable
@@ -702,13 +705,15 @@
       return (
         '<div class="bv-order-item">' +
           '<div class="bv-order-top">' +
-            '<span class="bv-order-name">' + escapeHtml(o.name) + '</span>' +
+            '<span class="bv-order-name">' + escapeHtml(o.name) + (o.isGift ? ' <span style="background:var(--marigold);color:var(--indigo-deep);font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;margin-left:6px;">GIFT</span>' : '') + '</span>' +
             '<span class="bv-order-date">' + dateStr + '</span>' +
           '</div>' +
           '<p class="bv-order-detail"><strong>Item:</strong> ' + escapeHtml(o.product) + '</p>' +
           '<p class="bv-order-detail"><strong>Qty:</strong> ' + escapeHtml(String(o.qty)) + '</p>' +
-          '<p class="bv-order-detail"><strong>Phone:</strong> ' + escapeHtml(o.phone) + '</p>' +
+          '<p class="bv-order-detail"><strong>' + (o.isGift ? 'Sender' : 'Phone') + ':</strong> ' + escapeHtml(o.phone) + '</p>' +
+          (o.isGift ? '<p class="bv-order-detail"><strong>Recipient:</strong> ' + escapeHtml(o.recipientName || '') + '</p>' : '') +
           '<p class="bv-order-detail"><strong>Delivery address:</strong> ' + escapeHtml(o.address) + '</p>' +
+          (o.isGift && o.giftMessage ? '<p class="bv-order-detail"><strong>Gift message:</strong> "' + escapeHtml(o.giftMessage) + '"</p>' : '') +
           (o.notes ? '<p class="bv-order-detail"><strong>Notes:</strong> ' + escapeHtml(o.notes) + '</p>' : '') +
           '<button class="bv-tag ' + (o.status === 'done' ? 'done' : 'pending') + '" data-toggle-order="' + o.id + '">' +
             (o.status === 'done' ? 'Fulfilled' : 'Mark as fulfilled') +
@@ -728,12 +733,20 @@
           '<p class="bv-panel-title bv-font-display">Place your order</p>' +
           '<div class="bv-modal-product"><strong>' + escapeHtml(prod.name) + '</strong> &mdash; &#8358;' + escapeHtml(prod.price) + '</div>' +
           '<form id="bv-order-form">' +
-            '<div class="bv-field"><label>Your name</label><input type="text" id="bv-o-name" required></div>' +
+            '<div class="bv-field" style="background:var(--blush);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:8px;">' +
+              '<input type="checkbox" id="bv-o-is-gift" style="width:auto;">' +
+              '<label style="margin:0;font-size:13px;font-weight:600;">This is a gift for someone else</label>' +
+            '</div>' +
+            '<div class="bv-field"><label id="bv-o-name-label">Your name</label><input type="text" id="bv-o-name" required></div>' +
             '<div class="bv-row2">' +
-              '<div class="bv-field"><label>Phone / WhatsApp</label><input type="tel" id="bv-o-phone" required></div>' +
+              '<div class="bv-field"><label id="bv-o-phone-label">Your phone / WhatsApp</label><input type="tel" id="bv-o-phone" required></div>' +
               '<div class="bv-field"><label>Quantity</label><input type="number" id="bv-o-qty" value="1" min="1" required></div>' +
             '</div>' +
-            '<div class="bv-field"><label>Delivery address (Lagos only for now)</label><textarea id="bv-o-address" required placeholder="Include your area/neighborhood in Lagos"></textarea></div>' +
+            '<div id="bv-o-gift-fields" style="display:none;">' +
+              '<div class="bv-field"><label>Recipient\'s name</label><input type="text" id="bv-o-recipient-name"></div>' +
+              '<div class="bv-field"><label>Personalized message (we\'ll include this with the gift)</label><textarea id="bv-o-gift-message" placeholder="e.g. Congratulations on your bundle of joy!"></textarea></div>' +
+            '</div>' +
+            '<div class="bv-field"><label id="bv-o-address-label">Delivery address (Lagos only for now)</label><textarea id="bv-o-address" required placeholder="Include the area/neighborhood in Lagos"></textarea></div>' +
             '<div class="bv-field"><label>Notes (optional)</label><textarea id="bv-o-notes"></textarea></div>' +
             '<p class="bv-hint" style="margin-top:0;margin-bottom:10px;">&#128205; We currently deliver within Lagos only.</p>' +
             '<button type="submit" class="bv-submit" style="background:var(--marigold);color:var(--indigo-deep);width:100%;font-size:15px;padding:14px 18px;">&#128230; Submit order &mdash; pay on delivery</button>' +
@@ -746,6 +759,13 @@
     document.getElementById('bv-modal-backdrop').onclick = function(e) {
       if (e.target.id === 'bv-modal-backdrop') closeModal();
     };
+    document.getElementById('bv-o-is-gift').addEventListener('change', function(e) {
+      const isGift = e.target.checked;
+      document.getElementById('bv-o-gift-fields').style.display = isGift ? '' : 'none';
+      document.getElementById('bv-o-name-label').textContent = isGift ? 'Your name (sender)' : 'Your name';
+      document.getElementById('bv-o-phone-label').textContent = isGift ? 'Your phone / WhatsApp (for payment arrangement)' : 'Phone / WhatsApp';
+      document.getElementById('bv-o-address-label').textContent = isGift ? "Recipient's delivery address (Lagos only for now)" : 'Delivery address (Lagos only for now)';
+    });
     document.getElementById('bv-order-form').onsubmit = function(e) {
       e.preventDefault();
       submitOrder(prod);
@@ -762,6 +782,9 @@
     const phone = document.getElementById('bv-o-phone').value;
     const address = document.getElementById('bv-o-address').value;
     const notes = document.getElementById('bv-o-notes').value;
+    const isGift = document.getElementById('bv-o-is-gift').checked;
+    const recipientName = isGift ? document.getElementById('bv-o-recipient-name').value : '';
+    const giftMessage = isGift ? document.getElementById('bv-o-gift-message').value : '';
 
     const { data, error } = await sb.from('orders').insert({
       product_name: prod.name,
@@ -770,7 +793,10 @@
       phone: phone,
       address: address,
       notes: notes,
-      status: 'pending'
+      status: 'pending',
+      is_gift: isGift,
+      recipient_name: recipientName || null,
+      gift_message: giftMessage || null
     }).select().single();
 
     if (error) {
@@ -790,7 +816,7 @@
         customer_name: name,
         phone: phone,
         address: address,
-        notes: notes || 'None'
+        notes: (isGift ? 'GIFT ORDER — Recipient: ' + recipientName + '. Message: "' + giftMessage + '". ' : '') + (notes || 'None')
       }).catch(function() { /* fails silently — order is already safely saved in Orders list */ });
     }
   }
